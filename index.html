@@ -251,10 +251,6 @@ footer{position:relative}
 .urgent .wrap{background:var(--urgent-soft);border:1px solid color-mix(in srgb,var(--urgent) 35%,transparent);border-radius:18px}
 @media (max-width:600px){.urgent{margin-block:0}.urgent .wrap{border-radius:0;border-inline:0}}
 @media (min-width:601px){.path,section.block,.urgent .wrap{max-width:min(1120px,calc(100% - 32px))}}
-/* landing photo shown in full so every face is visible */
-.hero-photo{order:-1;width:100%;max-width:min(100%,560px,calc((100vh - 150px) * .758));aspect-ratio:787/1038;justify-self:center;border-radius:22px;background:var(--photo) center/cover no-repeat;box-shadow:0 14px 40px rgb(0 0 0 / .18)}
-@media (min-width:860px){.hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center}.hero>div:first-child{justify-self:start}}
-@media (max-width:859px){.hero{gap:16px}.hero-photo{max-width:min(100%,560px)}}
 </style>
 </head>
 <body>
@@ -295,7 +291,6 @@ footer{position:relative}
       <button type="submit"><span class="en">Search</span><span class="zh" lang="zh-Hant">搜尋</span><span class="sc" lang="zh-Hans">搜索</span></button>
     </form>
   </div>
-  <div class="hero-photo" role="img" aria-label="A group of young people waving and smiling by the sea, with a lighthouse on the hill"></div>
   <svg class="hero-art" viewBox="0 0 240 240" aria-hidden="true">
     <circle cx="80" cy="80" r="62" fill="var(--c-play)" opacity=".9"/>
     <circle cx="160" cy="92" r="52" fill="var(--c-nhs)" opacity=".85"/>
