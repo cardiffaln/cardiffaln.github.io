@@ -240,16 +240,19 @@ body{background:var(--paper)}
 #app{position:relative;z-index:0}
 .hero-band{background:transparent}
 .hero-art{display:none}
-.hero{grid-template-columns:minmax(0,1fr);padding-block:40px 34vh}
+.hero{grid-template-columns:minmax(0,1fr);padding-block:40px 0}
 .hero>div:first-child{max-width:720px;padding:24px 26px;border-radius:18px;background:color-mix(in srgb,var(--card) 84%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgb(0 0 0 / .12)}
 .path,section.block{margin-block:20px;border-radius:18px;background:color-mix(in srgb,var(--paper) 92%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .path{padding-block:28px 32px}
-@media (max-width:600px){.hero{padding-block:24px 22vh}.hero>div:first-child{padding:18px}.path,section.block{border-radius:0;margin-block:0}}
+@media (max-width:600px){.hero{padding-block:16px}.hero>div:first-child{padding:18px}.path,section.block{border-radius:0;margin-block:0}}
 footer{position:relative}
+/* urgent help as a boxed panel, matching the other sections */
+.urgent{background:transparent;border-block:0;margin-block:20px}
+.urgent .wrap{background:var(--urgent-soft);border:1px solid color-mix(in srgb,var(--urgent) 35%,transparent);border-radius:18px}
+@media (max-width:600px){.urgent{margin-block:0}.urgent .wrap{border-radius:0;border-inline:0}}
 </style>
 </head>
 <body>
-
 <div class="m-zh" id="app">
 <div role="note" style="background:#F2B705;color:#16303A;text-align:center;font-weight:700;font-size:.92rem;line-height:1.4;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))">預覽版本，尚未發佈 · 预览版本，尚未发布 · PREVIEW, not the published site · <a href="https://cardiffaln.github.io/" style="color:#16303A">cardiffaln.github.io</a></div>
 <div class="bgphoto" aria-hidden="true"></div>
@@ -793,5 +796,6 @@ setLang(store.get("aln-lang")||"zh");
 renderCards();
 })();
 </script>
+
 </body>
 </html>
