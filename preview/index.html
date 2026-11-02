@@ -46,8 +46,8 @@ p{margin:0}
 /* language display */
 .m-en :is(.zh,.sc),.m-zh :is(.en,.sc),.m-sc :is(.en,.zh),.m-enzh .sc,.m-ensc .zh{display:none!important}
 .dual :is(.zh,.sc){display:block;color:var(--muted)}
-.dual :is(.inline,.chip,.nav,.cat) :is(.zh,.sc){display:inline;color:inherit}
-.dual :is(.inline,.chip,.nav,.cat) :is(.zh,.sc)::before{content:" · "}
+.dual :is(.inline,.chip,.nav,.cat,.copy,.tag,.qlink) :is(.zh,.sc){display:inline;color:inherit}
+.dual :is(.inline,.chip,.nav,.cat,.copy,.tag,.qlink) :is(.zh,.sc)::before{content:" · "}
 .dual .brand :is(.zh,.sc){font-size:.82rem;font-weight:400}
 .dual :is(h1,h2,h3) :is(.zh,.sc){display:block;color:inherit;font-size:.72em;margin-top:.2em}
 .dual .card h3 :is(.zh,.sc){font-size:.82em;color:var(--muted)}
@@ -264,7 +264,7 @@ footer{position:relative}
 </head>
 <body>
 
-<div class="m-zh" id="app">
+<div class="m-enzh dual" id="app">
 <div role="note" style="background:#F2B705;color:#16303A;text-align:center;font-weight:700;font-size:.92rem;line-height:1.4;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))">預覽版本，尚未發佈 · 预览版本，尚未发布 · PREVIEW, not the published site · <a href="https://cardiffaln.github.io/" style="color:#16303A">cardiffaln.github.io</a></div>
 <div class="bgphoto" aria-hidden="true"></div>
 <header class="bar">
@@ -283,7 +283,6 @@ footer{position:relative}
     <div class="seg" role="group" aria-label="語言 / 语言 / Language">
       <button type="button" data-lang="zh" aria-pressed="true" lang="zh-Hant">繁</button>
       <button type="button" data-lang="sc" aria-pressed="false" lang="zh-Hans">簡</button>
-      <button type="button" data-lang="en" aria-pressed="false" lang="en-GB">EN</button>
     </div>
   </div>
 </header>
@@ -739,12 +738,11 @@ let state={cat:"all",age:"any",q:""};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
 function setLang(l){
-  l=({enzh:"zh",ensc:"sc",both:"zh"})[l]||l;
-  if(!["en","zh","sc"].includes(l))l="zh";
-  app.className="m-"+l;
+  l=({ensc:"sc",sc:"sc"})[l]||"zh";
+  app.className=(l==="sc"?"m-ensc":"m-enzh")+" dual";
   document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
-  document.documentElement.lang=l==="zh"?"zh-Hant":l==="sc"?"zh-Hans":"en-GB";
-  const qi=document.getElementById("q");if(qi)qi.placeholder={zh:"搜尋：自閉症、言語治療、輪椅…",sc:"搜索：自闭症、言语治疗、轮椅…",en:"Search: autism, speech therapy, wheelchair…"}[l];
+  document.documentElement.lang=l==="sc"?"zh-Hans":"zh-Hant";
+  const qi=document.getElementById("q");if(qi)qi.placeholder={zh:"搜尋 Search：自閉症 autism、言語治療、輪椅…",sc:"搜索 Search：自闭症 autism、言语治疗、轮椅…"}[l];
   store.set("aln-lang",l);
 }
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
@@ -808,7 +806,7 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){goTo(g.dataset.go);return}
   const sc=e.target.closest("[data-scroll]");if(sc){const t=document.getElementById(sc.dataset.scroll);window.scrollTo({top:t.getBoundingClientRect().top+scrollY-70,behavior:"smooth"});return}
   const c=e.target.closest("[data-copy]");if(c){const v=c.dataset.copy;
-    const done=()=>toast(app.classList.contains("m-sc")?"已复制":app.classList.contains("m-zh")?"已複製":"Copied");
+    const done=()=>toast(app.classList.contains("m-ensc")?"已复制 Copied":"已複製 Copied");
     (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(done).catch(()=>{const r=document.createRange();r.selectNodeContents(c.previousElementSibling||c);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast("Selected – press Copy · 已選取")});}
 });
 let tt;function toast(m){let t=document.querySelector(".toast");if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t)}t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1600)}
