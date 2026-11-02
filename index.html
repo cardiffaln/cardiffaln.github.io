@@ -112,7 +112,9 @@ section.block{padding-block:44px}
 .contacts svg{margin-top:4px;color:var(--muted)}
 .contacts .lbl{color:var(--muted);font-size:.85rem}
 .contacts .tel{font-weight:700;font-variant-numeric:tabular-nums}
-.copy{font:inherit;font-size:.78rem;margin-left:6px;padding:1px 7px;border:1px solid var(--line);border-radius:5px;background:transparent;color:var(--muted);cursor:pointer}
+.copy{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-left:6px;width:26px;height:26px;padding:0;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer}
+.copy:hover{color:var(--slate);border-color:var(--slate)}
+.copy svg{margin:0!important;color:inherit!important}
 .sublist{margin:0;padding-left:18px;font-size:.92rem}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);margin-top:20px}
 /* faq */
@@ -360,7 +362,7 @@ footer{position:relative}
       <div>
         <h3><span class="en">Who we are</span><span class="zh" lang="zh-Hant">我們是誰</span><span class="sc" lang="zh-Hans">我们是谁</span></h3>
         <p style="margin-top:8px"><span class="en">This guide is produced by the Committee of the Cardiff Chinese ALN Support Group, a volunteer group of Chinese parents, carers and ALN professionals.</span><span class="zh" lang="zh-Hant">本指南由卡迪夫華人ALN互助組委員會編製。本會由華人家長、照顧者及ALN相關專業人士以義務形式組成。</span><span class="sc" lang="zh-Hans">本指南由卡迪夫华人ALN支援小组2025–2026年度委员会编制。</span></p>
-        <p><span class="en">Contact the Committee:</span><span class="zh" lang="zh-Hant">聯絡委員會：</span><span class="sc" lang="zh-Hans">电子邮件地址：</span> <b>iristo2026@yahoo.com</b> <button class="copy" type="button" data-copy="iristo2026@yahoo.com"><span class="en">Copy</span><span class="zh" lang="zh-Hant">複製</span><span class="sc" lang="zh-Hans">复制</span></button></p>
+        <p><span class="en">Contact the Committee:</span><span class="zh" lang="zh-Hant">聯絡委員會：</span><span class="sc" lang="zh-Hans">电子邮件地址：</span> <b>iristo2026@yahoo.com</b> <button class="copy" type="button" data-copy="iristo2026@yahoo.com" aria-label="Copy 複製" title="Copy 複製 / 复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg></button></p>
       </div>
       <div>
         <h3><span class="en">Please check before you act</span><span class="zh" lang="zh-Hant">行動前請先核實</span><span class="sc" lang="zh-Hans">致谢</span></h3>
@@ -711,8 +713,8 @@ ICON.fb=ICON.web;
 const host=u=>{try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return u}};
 function contactLi([type,val,lbl]){
   const label=lbl?` <span class="lbl inline">${bi(lbl)}</span>`:"";
-  if(type==="tel") return `<li>${ICON.tel}<span><a class="tel" href="tel:${val.replace(/\s/g,"")}">${esc(val)}</a><button class="copy" type="button" data-copy="${esc(val)}">${bi(T("Copy","複製"))}</button>${label}</span></li>`;
-  if(type==="mail") return `<li>${ICON.mail}<span><a href="mailto:${esc(val)}">${esc(val)}</a><button class="copy" type="button" data-copy="${esc(val)}">${bi(T("Copy","複製"))}</button></span></li>`;
+  if(type==="tel") return `<li>${ICON.tel}<span><a class="tel" href="tel:${val.replace(/\s/g,"")}">${esc(val)}</a><button class="copy" type="button" data-copy="${esc(val)}" aria-label="Copy 複製" title="Copy 複製 / 复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg></button>${label}</span></li>`;
+  if(type==="mail") return `<li>${ICON.mail}<span><a href="mailto:${esc(val)}">${esc(val)}</a><button class="copy" type="button" data-copy="${esc(val)}" aria-label="Copy 複製" title="Copy 複製 / 复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg></button></span></li>`;
   if(type==="web") return `<li>${ICON.web}<span><a href="${esc(val)}" target="_blank" rel="noopener">${esc(host(val))}</a></span></li>`;
   if(type==="fb") return `<li>${ICON.fb}<span><a href="${esc(val)}" target="_blank" rel="noopener">Facebook</a></span></li>`;
   if(type==="addr") return `<li>${ICON.addr}<span>${esc(val)}</span></li>`;
