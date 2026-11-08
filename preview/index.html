@@ -817,6 +817,7 @@ const app=document.getElementById("app");
 const box=document.getElementById("cards");
 const cards=[...box.querySelectorAll(".card")];
 cards.forEach(c=>{c._h=norm([c.id.slice(4),c.dataset.k||"",txt(c,"h3 span"),txt(c,".desc span"),txt(c,".sublist a"),txt(c,".contacts li>span"),[...c.querySelectorAll(".contacts a")].map(a=>a.getAttribute("href")).join(" ")].join(" "))});
+cards.forEach((c,i)=>{c._i=i;c._n=norm(txt(c,"h3 span"));c._k=norm(c.dataset.k||"")});
 const faqs=[...document.querySelectorAll("#faqList details")];
 faqs.forEach(d=>{d._h=norm(txt(d,"summary span,.faq-a p"))});
 const card=id=>document.getElementById("svc-"+id);
@@ -840,7 +841,11 @@ el.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;s
 const empty=document.createElement("div");empty.className="empty";empty.hidden=true;empty.innerHTML=bi(D.none,"p");box.appendChild(empty);
 function renderCards(){
 const q=norm(state.q.trim());const words=q.split(/\s+/);
-const out=cards.filter(c=>{const ok=(state.cat==="all"||c.dataset.cat===state.cat)&&(state.age==="any"||c.dataset.age.includes(state.age))&&(!q||words.every(w=>c._h.includes(w)));c.hidden=!ok;return ok});
+/* with a search, service-name matches rank first, then keyword and code matches, then mentions in descriptions */
+const rank=c=>words.reduce((n,w)=>n+(c._n.includes(w)?100:c.id.slice(4).toLowerCase()===w?60:c._k.includes(w)?30:0),0);
+const order=q?[...cards].sort((a,b)=>rank(b)-rank(a)||a._i-b._i):cards;
+order.forEach(c=>box.insertBefore(c,empty));
+const out=order.filter(c=>{const ok=(state.cat==="all"||c.dataset.cat===state.cat)&&(state.age==="any"||c.dataset.age.includes(state.age))&&(!q||words.every(w=>c._h.includes(w)));c.hidden=!ok;return ok});
 empty.hidden=out.length>0;
 document.getElementById("count").textContent=`${out.length} / ${cards.length}`;
 filterFaq(q);
@@ -857,9 +862,13 @@ if(faqN)more.push(`<button type="button" class="qlink" data-scroll="faq">${bi({e
 el.hidden=false;
 el.innerHTML=(n?out.slice(0,6).map(c=>`<button type="button" class="qi k-${c.dataset.cat}" data-go="${c.id.slice(4)}"><span class="code">${esc(c.id.slice(4))}</span><span>${nameOf(c)}</span></button>`).join(""):`<p class="qnone">${bi({en:"No services found. Try another word.",zh:"找不到相關服務，請試用其他字詞。",sc:"找不到相关服务，请试用其他关键词。"})}</p>`)+(more.length?`<div class="qmore">${more.join("")}</div>`:"");
 }
+const faqEmpty=document.createElement("div");faqEmpty.className="empty";faqEmpty.hidden=true;document.getElementById("faqList").after(faqEmpty);
 function filterFaq(q){
 faqs.forEach(d=>{const hit=!q||q.split(/\s+/).every(w=>d._h.includes(w));d.hidden=!hit;if(q&&hit)d.open=true});
 document.querySelectorAll(".faq-group").forEach(g=>g.hidden=![...g.querySelectorAll("details")].some(d=>!d.hidden));
+const none=!!q&&!faqs.some(d=>!d.hidden);
+faqEmpty.hidden=!none;
+if(none)faqEmpty.innerHTML=bi({en:`No questions match “${state.q.trim()}”.`,zh:`找不到符合「${state.q.trim()}」的問答。`,sc:`找不到符合“${state.q.trim()}”的问答。`},"p")+`<button type="button" class="link" data-reset>${bi({en:"Clear search and show all questions",zh:"清除搜尋並顯示全部問答",sc:"清除搜索并显示全部问答"})}</button>`;
 }
 function goTo(id){
 state={cat:"all",age:"any",q:""};document.getElementById("q").value="";
@@ -881,6 +890,7 @@ return `<div class="mini"><span class="code">${id}</span><div style="margin-top:
 
 /* events */
 document.addEventListener("click",e=>{
+if(e.target.closest("[data-reset]")){state.q="";document.getElementById("q").value="";renderCards();return}
 const g=e.target.closest("[data-go]");if(g){goTo(g.dataset.go);return}
 const sc=e.target.closest("[data-scroll]");if(sc){const t=document.getElementById(sc.dataset.scroll);window.scrollTo({top:t.getBoundingClientRect().top+scrollY-70,behavior:"smooth"});return}
 const c=e.target.closest("[data-copy]");if(c){const v=c.dataset.copy;
